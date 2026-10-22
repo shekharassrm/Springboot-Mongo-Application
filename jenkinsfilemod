@@ -1,0 +1,55 @@
+pipeline{
+    agent any;
+
+    stages{
+        stage('checkout code'){
+            steps{
+               git branch:'main',  url:'https://github.com/shekharassrm/Springboot-Mongo-Application.git', credentialsId:'github-private-creds'
+              }
+        }
+
+        stage('build'){
+            steps{
+                sh 'mvn clean package'
+            }
+        }
+        
+        stage('build docker image'){
+           steps{
+                sh 'docker build -t rachhit/maven-web-application:2'
+            }
+        }
+        
+        stage('push to dockerhub'){
+             steps{
+                withCredentials([usernamePassword(
+                  credentialsId: 'dockerhub-creds',
+                  usernameVariable: 'DOCKERHUB_USER',
+                  passwordVariable: 'DOCKERHUB_TOKEN'
+                )]){
+                    set +x
+                    echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USER" --password-stdin
+                    docker push rachhit/maven-web-application:2
+                   }
+             }
+        }
+        
+        stage('deploy to server'){
+            steps{
+                sshagent(credentials: ['deploy-server-ssh']){
+                    sh '''
+                          ssh -o StrictHostKeyChecking=accept-new ubuntu@3.111.57.55 '
+                          docker pull rachhit/maven-web-application:2 &&
+                          (docker stop maven-web-app 2>/dev/null || true) &&
+                          (docker rm maven-web-app 2>/dev/null || true) &&
+                          docker run -d --name maven-web-app --restart unless-stopped \
+                          -p 8080:8080 rachhit/maven-web-application:2 
+                          '
+                       '''
+                }
+            }
+        }
+        
+        
+    }
+}
