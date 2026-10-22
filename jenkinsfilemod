@@ -16,7 +16,7 @@ pipeline{
         
         stage('build docker image'){
            steps{
-                sh 'docker build -t rachhit/maven-web-application:2'
+                sh 'docker build -t rachhit/maven-web-application:2 .'
             }
         }
         
