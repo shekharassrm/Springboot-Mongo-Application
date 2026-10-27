@@ -1,0 +1,45 @@
+pipeline{
+   agent any;
+   
+   stages{
+     stage('checkout code'){
+        steps{
+            git branch:'main', url:'https://github.com/shekharassrm/Springboot-Mongo-Application.git', credentialsId:'github-private-creds'
+        }
+     }
+     
+     stage('build java app'){
+        steps{
+           sh 'mvn clean package'
+        }
+     }
+     
+     stage('build docker image'){
+         steps{
+             sh 'docker build -t 890679491501.dkr.ecr.ap-south-1.amazonaws.com/java-web-app:1 .'
+           }
+     }
+     
+     stage('pudh docker image to ecr'){
+          steps{
+             sh 'aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 890679491501.dkr.ecr.ap-south-1.amazonaws.com'
+             sh 'docker push 890679491501.dkr.ecr.ap-south-1.amazonaws.com/java-web-app:1'
+          }
+     }
+     
+     stage('deploy to server with compose'){
+         steps{
+            sshagent(credentials: ['deploy-server-ssh']){
+                 sh '''
+                     ssh -o StrictHostKeyChecking=accept-new ubuntu@13.233.115.241 '
+                     aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 890679491501.dkr.ecr.ap-south-1.amazonaws.com
+                     docker compose pull
+                     docker compose up -d 
+                     '
+                 '''
+            }
+         }
+     }
+     
+   }
+}
