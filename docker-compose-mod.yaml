@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  springapp:
+    image: 890679491501.dkr.ecr.ap-south-1.amazonaws.com/java-web-app:1
+    container_name: springapp
+    restart: always
+    environment:
+    - MONGO_DB_HOSTNAME=mongo
+    - MONGO_DB_USERNAME=production
+    - MONGO_DB_PASSWORD=production@123
+    
+    ports:
+      - "8080: 8080"
+    depends_on:
+    - mongo
+    networks:
+      share_net:
+      
+  mongo:
+    image: mongo
+    container_name: mongo_db
+    restart: unless-stopped
+    environment:
+    - MONGO_INITDB_ROOT_USERNAME=production
+    - MONGO_INITDB_ROOT_PASSWORD-production@123
+    
+    ports:
+      - "27017: 27017"
+    networks:
+      shared_net:
+    volumes:
+      mongo_data: /data/db
+
+volumes:
+  mongo_data:
+    external: true
+networks:
+  share_net:
+    external: true
