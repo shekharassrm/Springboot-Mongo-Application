@@ -18,7 +18,7 @@ services:
     - share_net
       
   mongo:
-    image: mongo
+    image: mongo:4.4
     container_name: mongo_db
     restart: unless-stopped
     environment:
