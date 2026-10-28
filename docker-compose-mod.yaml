@@ -15,7 +15,7 @@ services:
     depends_on:
     - mongo
     networks:
-    - share_net:
+    - share_net
       
   mongo:
     image: mongo
@@ -23,12 +23,12 @@ services:
     restart: unless-stopped
     environment:
     - MONGO_INITDB_ROOT_USERNAME=production
-    - MONGO_INITDB_ROOT_PASSWORD-production@123
+    - MONGO_INITDB_ROOT_PASSWORD=production@123
 
     networks:
-    - shared_net:
+    - shared_net
     volumes:
-    - mongo_data: /data/db
+    - mongo_data:/data/db
 
 volumes:
   mongo_data:
