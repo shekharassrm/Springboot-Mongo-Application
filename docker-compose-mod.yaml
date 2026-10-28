@@ -30,7 +30,7 @@ services:
     networks:
       shared_net:
     volumes:
-      mongo_data: /data/db
+    - mongo_data: /data/db
 
 volumes:
   mongo_data:
