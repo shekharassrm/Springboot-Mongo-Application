@@ -15,7 +15,7 @@ services:
     depends_on:
     - mongo
     networks:
-      share_net:
+    - share_net:
       
   mongo:
     image: mongo
@@ -28,7 +28,7 @@ services:
     ports:
       - "27017: 27017"
     networks:
-      shared_net:
+    - shared_net:
     volumes:
     - mongo_data: /data/db
 
