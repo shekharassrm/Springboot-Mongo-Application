@@ -31,7 +31,7 @@ pipeline{
          steps{
             sshagent(credentials: ['deploy-server-ssh']){
                  sh '''
-                     ssh -o StrictHostKeyChecking=accept-new ubuntu@15.206.179.210'
+                     ssh -o StrictHostKeyChecking=accept-new ubuntu@15.206.179.210 '
                      aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 890679491501.dkr.ecr.ap-south-1.amazonaws.com
                      docker compose -f docker-compose-mod.yaml pull
                      docker compose -f docker-compose-mod.yaml up -d 
