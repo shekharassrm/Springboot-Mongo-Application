@@ -11,7 +11,7 @@ services:
     - MONGO_DB_PASSWORD=production@123
     
     ports:
-    - "8080: 8080"
+    - "8080:8080"
     depends_on:
     - mongo
     networks:
@@ -26,7 +26,7 @@ services:
     - MONGO_INITDB_ROOT_PASSWORD=production@123
 
     networks:
-    - shared_net
+    - share_net
     volumes:
     - mongo_data:/data/db
 
