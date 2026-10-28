@@ -9,7 +9,6 @@ services:
     - MONGO_DB_HOSTNAME=mongo
     - MONGO_DB_USERNAME=production
     - MONGO_DB_PASSWORD=production@123
-    - SPRING_DATA_MONGODB_AUTHENTICATION_DATABASE=admin
     
     ports:
     - "8080:8080"
