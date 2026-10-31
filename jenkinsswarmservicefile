@@ -32,7 +32,7 @@ pipeline{
             sshagent(credentials: ['deploy-server-ssh']){
                  sh '''
                      set -e
-                     scp -o StrictHostKeyChecking=accept-new docker-compose-mod.yaml ubuntu@15.206.179.210:/home/ubuntu/docker-compose-mod.yaml
+                     scp -o StrictHostKeyChecking=accept-new docker-compose-mod.yaml ubuntu@65.0.173.194:/home/ubuntu/docker-compose-mod.yaml
                      ssh -o StrictHostKeyChecking=accept-new ubuntu@65.0.173.194 '
                      aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 890679491501.dkr.ecr.ap-south-1.amazonaws.com
                      docker service create --name springapp -p 8080:8080 --replicas 2 --with-registry-auth 890679491501.dkr.ecr.ap-south-1.amazonaws.com/java-web-app:1
